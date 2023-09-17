@@ -64,15 +64,19 @@ resource "google_bigquery_routine" "get_row_id" {
     DECLARE seq int64;
     DECLARE max_id int64;
 
-    set seq = (SELECT seq_value FROM `${var.dataset_id}.sequences` WHERE seq_name = sequence_name);
-    set max_id = (SELECT max(id) FROM `${var.dataset_id}.lookup_codes`);
+    set seq = (SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name);
+    set max_id = (SELECT max(id) FROM `news_dataset.news_resources`);
 
-    IF seq IS NULL THEN
-      INSERT INTO `${var.dataset_id}.sequences` (seq_name, seq_value) VALUES (sequence_name, max_id);
-    ELSE
-      UPDATE `${var.dataset_id}.sequences` SET seq_value = seq_value + 1 WHERE seq_name = sequence_name;
+    IF max_id IS NULL THEN
+      set max_id = 1;
     END IF;
 
-    SELECT seq_value FROM `${var.dataset_id}.sequences` WHERE seq_name = sequence_name;
+    IF seq IS NULL THEN
+      INSERT INTO `news_dataset.sequences` (seq_name, seq_value) VALUES (sequence_name, max_id);
+    ELSE
+      UPDATE `news_dataset.sequences` SET seq_value = seq_value + 1 WHERE seq_name = sequence_name;
+    END IF;
+
+    set seq_value = (SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name);
   EOS
 }

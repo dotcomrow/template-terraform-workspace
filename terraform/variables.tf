@@ -9,3 +9,7 @@ variable "region" {
 variable credentials_file {
     default = "google.key"
 }
+
+variable dataset_name {
+    default = "<DATASET-NAME>"
+}

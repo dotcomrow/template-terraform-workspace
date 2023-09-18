@@ -61,22 +61,16 @@ resource "google_bigquery_routine" "get_row_id" {
     data_type = "{\"typeKind\" :  \"STRING\"}"
   } 
   definition_body = <<-EOS
-    DECLARE seq int64;
-    DECLARE max_id int64;
+    DECLARE seq_value int64;
 
-    set seq = (SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name);
-    set max_id = (SELECT max(id) FROM `news_dataset.news_resources`);
-
-    IF max_id IS NULL THEN
-      set max_id = 1;
-    END IF;
-
-    IF seq IS NULL THEN
-      INSERT INTO `news_dataset.sequences` (seq_name, seq_value) VALUES (sequence_name, max_id);
+    set seq_value = (SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name);
+    
+    IF seq_value IS NULL THEN
+      INSERT INTO `news_dataset.sequences` (seq_name, seq_value) VALUES (sequence_name, 1);
     ELSE
       UPDATE `news_dataset.sequences` SET seq_value = seq_value + 1 WHERE seq_name = sequence_name;
     END IF;
 
-    set seq_value = (SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name);
+    SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name;
   EOS
 }

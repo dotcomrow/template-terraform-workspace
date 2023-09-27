@@ -1,6 +1,6 @@
 resource "google_bigquery_dataset" "main_dataset" {
-  dataset_id                  = "${var.dataset_id}_dataset"
-  description                 = "Dataset for map ${var.dataset_id} project"
+  dataset_id                  = "${var.dataset_name}_dataset"
+  description                 = "Dataset for map ${var.dataset_name} project"
   location                    = "US"
 }
 
@@ -39,8 +39,7 @@ resource "google_bigquery_table" "<table_name>" {
     "type": "INTEGER",
     "mode": "REQUIRED",
     "description": "project id used to identify the project"
-  },
-  
+  }, 
   {
     "name": "LAST_UPDATE_DATETIME",
     "type": "DATETIME",

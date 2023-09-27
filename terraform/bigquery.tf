@@ -63,14 +63,14 @@ resource "google_bigquery_routine" "get_row_id" {
   definition_body = <<-EOS
     DECLARE seq_value int64;
 
-    set seq_value = (SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name);
+    set seq_value = (SELECT seq_value FROM `<DATASET_NAME>_dataset.sequences` WHERE seq_name = sequence_name);
     
     IF seq_value IS NULL THEN
-      INSERT INTO `news_dataset.sequences` (seq_name, seq_value) VALUES (sequence_name, 1);
+      INSERT INTO `<DATASET_NAME>_dataset.sequences` (seq_name, seq_value) VALUES (sequence_name, 1);
     ELSE
-      UPDATE `news_dataset.sequences` SET seq_value = seq_value + 1 WHERE seq_name = sequence_name;
+      UPDATE `<DATASET_NAME>_dataset.sequences` SET seq_value = seq_value + 1 WHERE seq_name = sequence_name;
     END IF;
 
-    SELECT seq_value FROM `news_dataset.sequences` WHERE seq_name = sequence_name;
+    SELECT seq_value FROM `<DATASET_NAME>_dataset.sequences` WHERE seq_name = sequence_name;
   EOS
 }

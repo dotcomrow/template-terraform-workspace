@@ -11,5 +11,5 @@ variable credentials_file {
 }
 
 variable dataset_name {
-    default = "<DATASET-NAME>"
+    default = "<DATASET_NAME>"
 }

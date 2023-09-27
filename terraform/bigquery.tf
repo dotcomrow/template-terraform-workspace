@@ -27,9 +27,9 @@ resource "google_bigquery_table" "sequences" {
 EOF
 }
 
-resource "google_bigquery_table" "lookup_codes" {
+resource "google_bigquery_table" "<table_name>" {
   dataset_id = google_bigquery_dataset.main_dataset.dataset_id
-  table_id   = "${var.dataset_id}"
+  table_id   = "<table_name>"
   deletion_protection = false
 
   schema = <<EOF

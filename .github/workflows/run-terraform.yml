@@ -45,12 +45,15 @@ jobs:
         replace: ${{ vars.ORGANIZATION_ID }}
         regex: false
 
+    - name: get repository name
+      run: echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+  
     - name: Find and Replace
       uses: jacobtomlinson/gha-find-replace@v3
       with:
-        find: "<WORKSPACE_NAME>"
-        replace: ${{ vars.WORKSPACE_NAME }}
-        regex: false
+          find: "<WORKSPACE_NAME>"
+          replace: ${{ env.REPOSITORY_NAME }}
+          regex: false
 
     - name: Find and Replace
       uses: jacobtomlinson/gha-find-replace@v3

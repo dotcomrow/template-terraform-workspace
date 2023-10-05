@@ -1,25 +1,13 @@
-# resource "google_service_account" "data-layer-bigquery" {
-#   account_id   = "data-layer-bigquery"
-#   display_name = "data-layer-bigquery"
-# }
+resource "google_service_account" "service_account" {
+  account_id   = "${var.project_name}-cicd"
+  project      = "${var.project_name}"
+  display_name = "${var.project_name} GitHub Actions Service Account"
+}
 
-# resource "google_project_iam_binding" "data-layer-bigquery" {
-#   project = var.project
-#   role    = "roles/bigquery.dataEditor"
-#   members = [
-#     "serviceAccount:${google_service_account.data-layer-bigquery.email}"
-#   ]
-# }
-
-# resource "google_service_account" "ol-layer" {
-#   account_id   = "ol-layer"
-#   display_name = "dol-layer"
-# }
-
-# resource "google_project_iam_binding" "ol-layer" {
-#   project = var.project
-#   role    = "roles/run.invoker"
-#   members = [
-#     "serviceAccount:${google_service_account.ol-layer.email}"
-#   ]
-# }
+resource "google_project_iam_binding" "service_account_iam" {
+  project = "${var.project_name}"
+  role    = "roles/editor"
+  members = [
+    "serviceAccount:${google_service_account.service_account.email}"
+  ]
+}

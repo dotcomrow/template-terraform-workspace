@@ -25,3 +25,9 @@ variable "apis" {
     "bigquerystorage.googleapis.com"
   ]
 }
+
+variable billing_account {
+    description = "The billing account to associate with the project"
+    type        = string
+    nullable = false
+}

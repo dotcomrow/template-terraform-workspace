@@ -2,6 +2,7 @@ resource "google_project" "project" {
   name       = "${var.project_name}"
   project_id = "${var.project_name}"
   org_id     = "${var.gcp_org_id}"
+  billing_account = ${var.billing_account}
 }
 
 resource "google_project_service" "project_service" {

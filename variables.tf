@@ -1,28 +1,17 @@
-variable "project" {
-    type     = string
-    nullable = false
-}
-
 variable "region" {
     default = "us-east1"
-}
-
-variable credentials_file {
-    default = "google.key"
-}
-
-variable dataset_name {
-    default = "${var.project_name}-dataset"
 }
 
 variable "project_name" {
   description = "The name of the project to create"
   type        = string
+  nullable = false
 }
 
 variable "gcp_org_id" {
   description = "The organization id to create the project under"
   type        = string
+  nullable = false
 }
 
 variable "apis" {

@@ -61,17 +61,5 @@ resource "google_bigquery_routine" "get_row_id" {
     name = "sequence_name"
     data_type = "{\"typeKind\" :  \"STRING\"}"
   } 
-  definition_body = <<-EOS
-    DECLARE seq_value int64;
-
-    set seq_value = (SELECT seq_value FROM sequences WHERE seq_name = sequence_name);
-    
-    IF seq_value IS NULL THEN
-      INSERT INTO sequences (seq_name, seq_value) VALUES (sequence_name, 1);
-    ELSE
-      UPDATE sequences SET seq_value = seq_value + 1 WHERE seq_name = sequence_name;
-    END IF;
-
-    SELECT seq_value FROM sequences WHERE seq_name = sequence_name;
-  EOS
+  definition_body = templatefile("${path.module}/templates/get_row_id.template", { dataset = google_bigquery_dataset.main_dataset.dataset_id })
 }

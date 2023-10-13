@@ -1,3 +1,15 @@
+data "google_compute_default_service_account" "default" {
+  project = var.project_id
+
+  depends_on = [ google_project_service.project_service ]
+}
+
+resource "google_project_iam_member" "secret_manager_grant" {
+  project = var.common_project_id
+  role    = "roles/secretmanager.secretAccessor"
+  member  = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+}
+
 resource "google_cloud_run_v2_service" "<name>-data-svc" {
   name     = "<name>-data-svc"
   location = var.region

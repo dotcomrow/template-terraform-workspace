@@ -4,6 +4,12 @@ data "google_compute_default_service_account" "default" {
   depends_on = [ google_project_service.project_service ]
 }
 
+resource "google_project_iam_member" "registry_permissions" {
+  project = var.common_project_id
+  role   = "roles/composer.environmentAndStorageObjectViewer"
+  member  = "serviceAccount:service-${google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
 resource "google_project_iam_member" "secret_manager_grant" {
   project = var.common_project_id
   role    = "roles/secretmanager.secretAccessor"

@@ -94,6 +94,11 @@ resource "google_cloud_run_v2_service" "<name>-ol-svc" {
         name = "AUDIENCE"
         value = var.audience
       }
+
+      env {
+        name = "REGION"
+        value = var.region
+      }
     }
   }
 }

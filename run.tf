@@ -91,11 +91,6 @@ resource "google_cloud_run_v2_service" "<name>-ol-svc" {
       }
 
       env {
-        name = "OL_LAYER_URL"
-        value = "${google_cloud_run_v2_service.<name>.uri}/${var.project_id}"
-      }
-
-      env {
         name = "AUDIENCE"
         value = var.audience
       }

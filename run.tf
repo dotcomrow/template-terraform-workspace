@@ -10,6 +10,12 @@ resource "google_project_iam_member" "registry_permissions" {
   member  = "serviceAccount:service-${google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
 }
 
+resource "google_project_iam_member" "artifact_permissions" {
+  project = var.common_project_id
+  role   = "roles/artifactregistry.reader"
+  member  = "serviceAccount:service-${google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
 resource "google_project_iam_member" "secret_manager_grant" {
   project = var.common_project_id
   role    = "roles/secretmanager.secretAccessor"

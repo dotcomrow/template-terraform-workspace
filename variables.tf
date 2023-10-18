@@ -33,7 +33,8 @@ variable "apis" {
     "cloudbilling.googleapis.com",
     "run.googleapis.com",
     "artifactregistry.googleapis.com",
-    "containerregistry.googleapis.com"
+    "containerregistry.googleapis.com",
+    "compute.googleapis.com"
   ]
 }
 
@@ -63,6 +64,18 @@ variable "common_project_id" {
 
 variable "audience" {
   description = "Audience to use for the service account"
+  type        = string
+  nullable = false
+}
+
+variable "config_security_group" {
+  description = "Security group to use for the service account"
+  type        = string
+  nullable = false
+}
+
+variable "cloudflare_account_id" {
+  description = "Cloudflare account id"
   type        = string
   nullable = false
 }

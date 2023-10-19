@@ -8,12 +8,16 @@ resource "google_project_iam_member" "registry_permissions" {
   project = var.common_project_id
   role   = "roles/composer.environmentAndStorageObjectViewer"
   member  = "serviceAccount:service-${google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+
+  depends_on = [ data.google_compute_default_service_account.default ]
 }
 
 resource "google_project_iam_member" "artifact_permissions" {
   project = var.common_project_id
   role   = "roles/artifactregistry.reader"
   member  = "serviceAccount:service-${google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
+
+  depends_on = [ data.google_compute_default_service_account.default ]
 }
 
 resource "google_project_iam_member" "secret_manager_grant" {

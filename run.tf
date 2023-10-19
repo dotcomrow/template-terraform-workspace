@@ -117,6 +117,13 @@ resource "google_cloud_run_v2_service" "<name>-ol-svc" {
   depends_on = [ google_project_iam_member.artifact_permissions, google_project_iam_member.registry_permissions, google_project_iam_member.secret_manager_grant ]
 }
 
+resource "cloudflare_workers_kv" "entry" {
+  account_id   = var.cloudflare_account_id
+  namespace_id = var.cloudflare_worker_namespace_id
+  key          =  "${google_cloud_run_v2_service.lookup-codes-ol-svc.name}"
+  value        = "${google_cloud_run_v2_service.lookup-codes-ol-svc.uri}/${var.project_id}"
+}
+
 data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"

@@ -79,3 +79,9 @@ variable "cloudflare_account_id" {
   type        = string
   nullable = false
 }
+
+variable "cloudflare_worker_namespace_id" {
+  description = "Cloudflare worker namespace id"
+  type        = string
+  nullable = false
+}

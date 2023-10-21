@@ -120,8 +120,8 @@ resource "google_cloud_run_v2_service" "<name>-ol-svc" {
 resource "cloudflare_workers_kv" "entry" {
   account_id   = var.cloudflare_account_id
   namespace_id = var.cloudflare_worker_namespace_id
-  key          =  "${google_cloud_run_v2_service.lookup-codes-ol-svc.name}"
-  value        = "${google_cloud_run_v2_service.lookup-codes-ol-svc.uri}/${var.project_id}"
+  key          =  "${google_cloud_run_v2_service.<name>-ol-svc.name}"
+  value        = "${google_cloud_run_v2_service.<name>-ol-svc.uri}/${var.project_id}"
 }
 
 data "google_iam_policy" "noauth" {

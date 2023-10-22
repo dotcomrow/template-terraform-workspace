@@ -85,3 +85,9 @@ variable "cloudflare_worker_namespace_id" {
   type        = string
   nullable = false
 }
+
+variable "domain" {
+  description = "Account domain"
+  type        = string
+  nullable = false
+}

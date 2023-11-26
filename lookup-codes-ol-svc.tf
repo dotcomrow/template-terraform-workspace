@@ -1,13 +1,13 @@
 locals {
-  lookup_codes_ol_svc_name = "lookup-codes-ol-svc"
+  svc_name = "lookup-codes-ol-svc"
 }
 
-data "external" "lookup-codes-ol-svc-image-sha" {
-  program = ["${path.module}/scripts/get-image-sha.sh","${local.lookup_codes_ol_svc_name}","${var.common_project_id}"]
+data "external" "svc-image-sha" {
+  program = ["${path.module}/scripts/get-image-sha.sh","${local.svc_name}","${var.common_project_id}"]
 }
 
-resource "google_cloud_run_v2_service" "lookup-codes-ol-svc" {
-  name     = local.lookup_codes_ol_svc_name
+resource "google_cloud_run_v2_service" "svc" {
+  name     = local.svc_name
   location = var.region
   ingress = "INGRESS_TRAFFIC_ALL"
   project = var.project_id
@@ -25,7 +25,7 @@ resource "google_cloud_run_v2_service" "lookup-codes-ol-svc" {
       }
     }
     containers {
-      image = "gcr.io/${var.common_project_id}/${local.lookup_codes_ol_svc_name}@${data.external.lookup-codes-ol-svc-image-sha.result["sha"]}"
+      image = "gcr.io/${var.common_project_id}/${local.svc_name}@${data.external.svc-image-sha.result["sha"]}"
 
       env {
         name = "SECRET_KEY"
@@ -44,7 +44,7 @@ resource "google_cloud_run_v2_service" "lookup-codes-ol-svc" {
 
       env {
         name = "DATA_LAYER_URL"
-        value = "${google_cloud_run_v2_service.lookup-codes-data-svc.uri}/${var.project_id}"
+        value = "${google_cloud_run_v2_service.svc.uri}/${var.project_id}"
       }
 
       env {
@@ -64,7 +64,7 @@ resource "google_cloud_run_v2_service" "lookup-codes-ol-svc" {
 
       env {
         name = "CONTEXT_ROOT"
-        value = local.lookup_codes_ol_svc_name
+        value = local.svc_name
       }
 
       volume_mounts {
@@ -80,14 +80,14 @@ resource "google_cloud_run_v2_service" "lookup-codes-ol-svc" {
 resource "cloudflare_workers_kv" "entry-lookup_codes" {
   account_id   = var.cloudflare_account_id
   namespace_id = var.cloudflare_worker_namespace_id
-  key          =  "${google_cloud_run_v2_service.lookup-codes-ol-svc.name}"
-  value        = "${google_cloud_run_v2_service.lookup-codes-ol-svc.uri}/${local.lookup_codes_ol_svc_name}"
+  key          =  "${google_cloud_run_v2_service.svc.name}"
+  value        = "${google_cloud_run_v2_service.svc.uri}/${local.svc_name}"
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth-lookup_codes" {
-  location    = google_cloud_run_v2_service.lookup-codes-ol-svc.location
-  project     = google_cloud_run_v2_service.lookup-codes-ol-svc.project
-  service     = google_cloud_run_v2_service.lookup-codes-ol-svc.name
+  location    = google_cloud_run_v2_service.svc.location
+  project     = google_cloud_run_v2_service.svc.project
+  service     = google_cloud_run_v2_service.svc.name
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }

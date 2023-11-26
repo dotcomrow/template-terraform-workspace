@@ -1,13 +1,13 @@
 locals {
-  lookup_codes_data_svc_name = "lookup-codes-data-svc"
+  svc_name = "svc"
 }
 
-data "external" "lookup-codes-data-svc-image-sha" {
-  program = ["${path.module}/scripts/get-image-sha.sh","${local.lookup_codes_data_svc_name}","${var.common_project_id}"]
+data "external" "svc-image-sha" {
+  program = ["${path.module}/scripts/get-image-sha.sh","${local.svc_name}","${var.common_project_id}"]
 }
 
-resource "google_cloud_run_v2_service" "lookup-codes-data-svc" {
-  name     = local.lookup_codes_data_svc_name
+resource "google_cloud_run_v2_service" "svc" {
+  name     = local.svc_name
   location = var.region
   ingress = "INGRESS_TRAFFIC_ALL"
   project = var.project_id
@@ -25,7 +25,7 @@ resource "google_cloud_run_v2_service" "lookup-codes-data-svc" {
       }
     }
     containers {
-      image = "gcr.io/${var.common_project_id}/${local.lookup_codes_data_svc_name}@${data.external.lookup-codes-data-svc-image-sha.result["sha"]}"
+      image = "gcr.io/${var.common_project_id}/${local.svc_name}@${data.external.svc-image-sha.result["sha"]}"
 
       env {
         name = "SECRET_KEY"

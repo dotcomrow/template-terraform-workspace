@@ -91,3 +91,9 @@ variable "domain" {
   type        = string
   nullable = false
 }
+
+variable "registry_name" {
+  description = "Registry name"
+  type        = string
+  nullable = false
+}
